@@ -3,6 +3,9 @@
 
 name: Python application
 
+env:
+  BASE_URL: http://54.183.112.233
+
 on:
   push:
     branches: [ main ]
