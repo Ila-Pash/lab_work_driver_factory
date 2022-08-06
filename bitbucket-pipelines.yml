@@ -1,0 +1,28 @@
+#docker образ
+image: python:3.10
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Запуск selenium-теста
+          #скрипт будет взаимодейтсвовать с сервисом headless
+          services:
+            - headless
+          caches:
+            - pip
+          script:
+              #установить все необходимые зависимости
+            - pip install -r requirements.txt
+              # установить pytest для сохранения отчётов в форматах: xml и html в папку test-reports
+            - pytest -v --junitxml=test-reports/report.xml --html=test-reports/report.html
+          artifacts:
+            # установить из какой папки образа забрать тест-отчёты (забрать все файлы из папки test-reports)
+            - test-reports/**
+
+definitions:
+  #доп сервисы, которые нужно запустить
+  services:
+    headless:
+      #docker образ
+      image: browserless/chrome:latest
